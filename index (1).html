@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Repositorio Web de Matemáticas | Banco de Contenidos Digitales</title>
+  <style>
+    :root {
+      --navy: #06152f;
+      --deep: #071f46;
+      --blue: #00acc9;
+      --blue-2: #21d4fd;
+      --green: #80ba27;
+      --lime: #cad400;
+      --orange: #ff8a00;
+      --white: #ffffff;
+      --soft: #dff7ff;
+      --muted: #a9c3d6;
+      --panel: rgba(255, 255, 255, 0.1);
+      --panel-strong: rgba(255, 255, 255, 0.16);
+      --line: rgba(255, 255, 255, 0.22);
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--white);
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(0, 172, 201, 0.32), transparent 28%),
+        radial-gradient(circle at 88% 12%, rgba(128, 186, 39, 0.25), transparent 24%),
+        radial-gradient(circle at 72% 80%, rgba(255, 138, 0, 0.22), transparent 28%),
+        linear-gradient(135deg, #041126 0%, #071f46 48%, #05142d 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.055) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,0,0,0.2));
+      z-index: -3;
+    }
+
+    body::after {
+      content: "f(x)=ax²+bx+c   ∫ aprendizaje dx   π   Σ   y=mx+b   √x   sen(θ)   IA";
+      position: fixed;
+      left: -8vw;
+      right: -8vw;
+      top: 42%;
+      color: rgba(255, 255, 255, 0.045);
+      font-size: clamp(2.8rem, 8vw, 8rem);
+      font-weight: 900;
+      white-space: nowrap;
+      transform: rotate(-9deg);
+      z-index: -2;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .math-orb {
+      position: fixed;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 50%;
+      filter: blur(0.2px);
+      pointer-events: none;
+      z-index: -1;
+      animation: float 10s ease-in-out infinite;
+    }
+
+    .math-orb.one {
+      width: 220px;
+      height: 220px;
+      left: -70px;
+      top: 210px;
+      background: radial-gradient(circle, rgba(33, 212, 253, 0.16), transparent 65%);
+    }
+
+    .math-orb.two {
+      width: 160px;
+      height: 160px;
+      right: 8%;
+      bottom: 12%;
+      background: radial-gradient(circle, rgba(202, 212, 0, 0.16), transparent 65%);
+      animation-delay: -4s;
+    }
+
+    .math-orb.three {
+      width: 110px;
+      height: 110px;
+      right: 18%;
+      top: 145px;
+      background: radial-gradient(circle, rgba(255, 138, 0, 0.18), transparent 65%);
+      animation-delay: -7s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(18px, -22px, 0) scale(1.04); }
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(4, 17, 38, 0.78);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 72px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      font-weight: 800;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 auto;
+      border-radius: var(--radius);
+      color: #06152f;
+      background: linear-gradient(135deg, var(--blue-2), var(--lime));
+      box-shadow: 0 12px 34px rgba(0, 172, 201, 0.32);
+      font-size: 1.35rem;
+    }
+
+    .brand span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      color: var(--soft);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 700;
+      transition: 180ms ease;
+    }
+
+    .nav a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+    }
+
+    .hero {
+      position: relative;
+      padding: 76px 0 46px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.06fr) minmax(320px, 0.94fr);
+      gap: 30px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      color: #effcff;
+      background: rgba(255, 255, 255, 0.09);
+      font-weight: 800;
+      font-size: 0.86rem;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.16);
+    }
+
+    .pulse {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--lime);
+      box-shadow: 0 0 0 8px rgba(202, 212, 0, 0.16);
+    }
+
+    h1 {
+      margin: 24px 0 16px;
+      max-width: 760px;
+      font-size: clamp(2.45rem, 6vw, 5.6rem);
+      line-height: 0.96;
+      letter-spacing: 0;
+    }
+
+    .gradient-text {
+      color: transparent;
+      background: linear-gradient(90deg, #ffffff 0%, #21d4fd 34%, #cad400 68%, #ffb247 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .hero-copy {
+      max-width: 740px;
+      margin: 0;
+      color: #cfe6f1;
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 12px 18px;
+      border: 0;
+      border-radius: var(--radius);
+      color: #041126;
+      background: var(--white);
+      text-decoration: none;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--blue-2), var(--lime));
+      box-shadow: 0 18px 45px rgba(0, 172, 201, 0.26);
+    }
+
+    .btn.secondary {
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.24);
+    }
+
+    .formula-stage {
+      position: relative;
+      min-height: 470px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06)),
+        radial-gradient(circle at 70% 28%, rgba(33, 212, 253, 0.22), transparent 42%);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .formula-stage::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 26px 26px;
+      opacity: 0.85;
+    }
+
+    .formula-card {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      min-height: 434px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      overflow: hidden;
+      background: rgba(6, 21, 47, 0.58);
+    }
+
+    #mathCanvas {
+      width: 100%;
+      height: 280px;
+      display: block;
+    }
+
+    .formula-info {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .mini-stat {
+      min-height: 88px;
+      padding: 14px;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .mini-stat strong {
+      display: block;
+      color: #ffffff;
+      font-size: 1.3rem;
+      margin-bottom: 4px;
+    }
+
+    .mini-stat span {
+      color: #bad3df;
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+
+    .section {
+      padding: 42px 0;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: clamp(1.8rem, 3vw, 2.7rem);
+      line-height: 1.05;
+    }
+
+    .section-text {
+      max-width: 760px;
+      margin: 10px 0 0;
+      color: #c5ddec;
+      line-height: 1.65;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .stat {
+      padding: 18px;
+      min-height: 116px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.09);
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.18);
+    }
+
+    .stat strong {
+      display: block;
+      color: #ffffff;
+      font-size: 2.1rem;
+      line-height: 1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 8px;
+      color: #c5ddec;
+      font-weight: 700;
+    }
+
+    .toolbar {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      margin: 16px 0 22px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.09);
+      backdrop-filter: blur(16px);
+    }
+
+    .searchbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 0 14px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: var(--radius);
+      background: rgba(3, 13, 31, 0.62);
+    }
+
+    .searchbox input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      color: var(--white);
+      background: transparent;
+      font: inherit;
+      font-weight: 700;
+    }
+
+    .searchbox input::placeholder {
+      color: #8fb0c3;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .chip {
+      min-height: 40px;
+      padding: 9px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.17);
+      border-radius: 999px;
+      color: #e9fbff;
+      background: rgba(255, 255, 255, 0.09);
+      font-weight: 800;
+      cursor: pointer;
+      transition: 180ms ease;
+    }
+
+    .chip:hover,
+    .chip.active {
+      color: #031126;
+      background: linear-gradient(135deg, var(--blue-2), var(--lime));
+      border-color: transparent;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .resource-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 360px;
+      padding: 18px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.07)),
+        radial-gradient(circle at 90% 10%, var(--accent-soft), transparent 36%);
+      box-shadow: 0 22px 54px rgba(0, 0, 0, 0.22);
+      overflow: hidden;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .resource-card::before {
+      content: attr(data-symbol);
+      position: absolute;
+      right: 18px;
+      top: 8px;
+      color: rgba(255, 255, 255, 0.08);
+      font-size: 6.5rem;
+      font-weight: 900;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .resource-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 255, 255, 0.32);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.18), rgba(255,255,255,0.09)),
+        radial-gradient(circle at 90% 10%, var(--accent-soft), transparent 42%);
+    }
+
+    .card-top {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: #031126;
+      background: var(--accent);
+      font-weight: 900;
+      font-size: 0.78rem;
+    }
+
+    .number {
+      color: #d8f5ff;
+      font-weight: 900;
+      opacity: 0.85;
+    }
+
+    .resource-card h3 {
+      position: relative;
+      margin: 0 0 10px;
+      color: #ffffff;
+      font-size: 1.25rem;
+      line-height: 1.2;
+    }
+
+    .description {
+      position: relative;
+      margin: 0;
+      color: #cfe3ee;
+      line-height: 1.58;
+      flex: 1;
+    }
+
+    .author {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.13);
+      color: #ffffff;
+      font-weight: 800;
+    }
+
+    .author-icon {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      flex: 0 0 auto;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .tags {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 16px 0;
+    }
+
+    .tag {
+      padding: 6px 8px;
+      border-radius: 999px;
+      color: #dff7ff;
+      background: rgba(255, 255, 255, 0.1);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .card-actions {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .visit {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      color: #041126;
+      background: var(--accent);
+      text-decoration: none;
+      font-weight: 950;
+      transition: transform 180ms ease, filter 180ms ease;
+    }
+
+    .copy {
+      width: 44px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: var(--radius);
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .visit:hover,
+    .copy:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+    }
+
+    .empty {
+      display: none;
+      padding: 34px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.08);
+      color: #d8f3ff;
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .method {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .method-card {
+      padding: 22px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .method-card strong {
+      display: block;
+      color: #ffffff;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .method-card p {
+      margin: 0;
+      color: #c4dceb;
+      line-height: 1.6;
+    }
+
+    .footer {
+      padding: 34px 0 44px;
+      color: #bdd6e4;
+      text-align: center;
+    }
+
+    .footer strong {
+      color: #ffffff;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      z-index: 40;
+      width: min(420px, calc(100% - 32px));
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      color: #031126;
+      background: linear-gradient(135deg, var(--blue-2), var(--lime));
+      box-shadow: 0 18px 48px rgba(0,0,0,0.35);
+      font-weight: 900;
+      text-align: center;
+      transform: translate(-50%, 120px);
+      opacity: 0;
+      transition: 220ms ease;
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .cards,
+      .method,
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .filters {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .topbar-inner,
+      .section-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav {
+        justify-content: flex-start;
+      }
+
+      .hero {
+        padding-top: 44px;
+      }
+
+      .cards,
+      .method,
+      .stats,
+      .formula-info {
+        grid-template-columns: 1fr;
+      }
+
+      .formula-stage {
+        min-height: auto;
+      }
+
+      .formula-card {
+        min-height: auto;
+      }
+
+      #mathCanvas {
+        height: 230px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="math-orb one"></div>
+  <div class="math-orb two"></div>
+  <div class="math-orb three"></div>
+
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <div class="brand" aria-label="Repositorio Web de Matemáticas">
+        <div class="brand-mark">Σ</div>
+        <div>
+          Repositorio Web Matemático
+          <span>Banco de contenidos digitales para el aula</span>
+        </div>
+      </div>
+      <nav class="nav" aria-label="Navegación principal">
+        <a href="#inicio">Inicio</a>
+        <a href="#repositorio">Contenidos</a>
+        <a href="#uso">Uso pedagógico</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <div class="eyebrow"><span class="pulse"></span> Enseñanza de las matemáticas con recursos digitales</div>
+          <h1>Banco de contenidos <span class="gradient-text">matemáticos interactivos</span></h1>
+          <p class="hero-copy">
+            Un repositorio web para reunir proyectos, laboratorios, demostraciones y experiencias digitales creadas para fortalecer la enseñanza de las matemáticas mediante visualización, exploración, IA y actividades interactivas.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#repositorio">Explorar recursos</a>
+            <a class="btn secondary" href="#uso">Ver enfoque pedagógico</a>
+          </div>
+          <div class="stats" aria-label="Resumen del repositorio">
+            <div class="stat"><strong id="totalResources">10</strong><span>recursos enlazados</span></div>
+            <div class="stat"><strong>5</strong><span>categorías didácticas</span></div>
+            <div class="stat"><strong>100%</strong><span>listo para GitHub Pages</span></div>
+            <div class="stat"><strong>IA</strong><span>aprendizaje visual e interactivo</span></div>
+          </div>
+        </div>
+
+        <div class="formula-stage" aria-label="Animación matemática decorativa">
+          <div class="formula-card">
+            <canvas id="mathCanvas" width="720" height="360"></canvas>
+            <div class="formula-info">
+              <div class="mini-stat">
+                <strong>y = mx+b</strong>
+                <span>Modelos lineales, pendiente y lectura gráfica.</span>
+              </div>
+              <div class="mini-stat">
+                <strong>sen θ</strong>
+                <span>Demostraciones trigonométricas y movimiento.</span>
+              </div>
+              <div class="mini-stat">
+                <strong>Geo + IA</strong>
+                <span>Exploración visual, datos y pensamiento matemático.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="repositorio">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">Contenidos digitales destacados</h2>
+            <p class="section-text">
+              Usa el buscador o filtra por categoría para encontrar rápidamente recursos sobre geometría, trigonometría, estadística, inteligencia artificial y experiencias interactivas.
+            </p>
+          </div>
+        </div>
+
+        <div class="toolbar" role="search">
+          <label class="searchbox" for="searchInput">
+            <span aria-hidden="true">⌕</span>
+            <input id="searchInput" type="search" placeholder="Buscar por autor, tema, proyecto o palabra clave...">
+          </label>
+          <div class="filters" id="filters" aria-label="Filtros por categoría"></div>
+        </div>
+
+        <div class="cards" id="resourceGrid"></div>
+        <div class="empty" id="emptyState">No se encontraron recursos con ese criterio. Prueba con otra palabra o categoría.</div>
+      </div>
+    </section>
+
+    <section class="section" id="uso">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">Uso pedagógico sugerido</h2>
+            <p class="section-text">
+              Este banco puede servir como vitrina académica, punto de acceso para estudiantes y evidencia de producción digital en cursos de herramientas de IA aplicadas a la enseñanza de las matemáticas.
+            </p>
+          </div>
+        </div>
+
+        <div class="method">
+          <article class="method-card">
+            <strong>1. Explorar antes de explicar</strong>
+            <p>Inicia la clase con un recurso visual para activar preguntas, conjeturas y predicciones matemáticas.</p>
+          </article>
+          <article class="method-card">
+            <strong>2. Conectar representación y concepto</strong>
+            <p>Relaciona la gráfica, la fórmula, el lenguaje natural y la situación problema para favorecer comprensión profunda.</p>
+          </article>
+          <article class="method-card">
+            <strong>3. Socializar producción digital</strong>
+            <p>Usa cada tarjeta como puerta de entrada a proyectos de autoría estudiantil, reflexión didáctica y mejora continua.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell">
+      <strong>Repositorio Web de Matemáticas.</strong> Página académica preparada para publicación en GitHub Pages.
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Enlace copiado</div>
+
+  <script>
+    const resources = [
+      {
+        title: "Bahía Recta",
+        author: "Valentina Barrera Sánchez",
+        url: "https://valebarrerasanchez.github.io/bahia_recta/",
+        category: "Geometría analítica",
+        symbol: "y",
+        accent: "#21d4fd",
+        description: "Proyecto digital para aproximarse a la recta, la pendiente y la interpretación de relaciones lineales desde una experiencia visual y navegable.",
+        tags: ["Recta", "Plano cartesiano", "Visualización"]
+      },
+      {
+        title: "Trigoou: laboratorio de demostraciones trigonométricas",
+        author: "Waldo Luis Viloria Bastidas",
+        url: "https://profe-waldo-viloria.github.io/Trigoou-laboratorio-de-demostraciones-trigonom-tricas/",
+        category: "Trigonometría",
+        symbol: "θ",
+        accent: "#cad400",
+        description: "Laboratorio web orientado a demostraciones y exploraciones trigonométricas, útil para conectar ángulos, razones, movimiento y argumentación matemática.",
+        tags: ["Trigonometría", "Demostraciones", "Ángulos"]
+      },
+      {
+        title: "Artefacto interactivo de matemáticas",
+        author: "Oscar Goenaga",
+        url: "https://claude.ai/public/artifacts/421a2f54-1738-4221-ac8f-a7025275c133",
+        category: "IA educativa",
+        symbol: "AI",
+        accent: "#ff8a00",
+        description: "Recurso publicado como artefacto digital para apoyar actividades de exploración, práctica y explicación matemática mediadas por inteligencia artificial.",
+        tags: ["IA", "Artefacto digital", "Exploración"]
+      },
+      {
+        title: "Experiencia matemática interactiva",
+        author: "Leonardo Barrios",
+        url: "https://publish-my-page-99.lovable.app/",
+        category: "Interactividad",
+        symbol: "ƒ",
+        accent: "#00acc9",
+        description: "Página interactiva creada para presentar contenidos matemáticos con una interfaz web moderna, orientada a la participación activa del estudiante.",
+        tags: ["Web educativa", "Interactividad", "Recursos"]
+      },
+      {
+        title: "Recurso digital matemático",
+        author: "Ivan Pedrozo",
+        url: "https://pixel-perfect-render-9145.lovable.app/",
+        category: "Interactividad",
+        symbol: "π",
+        accent: "#80ba27",
+        description: "Aplicación web con enfoque visual para organizar contenidos o actividades matemáticas en un entorno digital claro, atractivo y consultable.",
+        tags: ["Aplicación web", "Aula digital", "Matemáticas"]
+      },
+      {
+        title: "IdentixMaths",
+        author: "Gissela Lopez",
+        url: "https://sites.google.com/view/identixmaths/inicio?pli=1&authuser=0",
+        category: "Identidad matemática",
+        symbol: "≡",
+        accent: "#21d4fd",
+        description: "Sitio académico para presentar contenidos matemáticos, identidad del proyecto y recursos de consulta para apoyar procesos de aprendizaje.",
+        tags: ["Sitio web", "Identidad", "Recursos"]
+      },
+      {
+        title: "Obra Geo",
+        author: "Jonaidys Anaya",
+        url: "https://jonaanaya0605-stack.github.io/Obra_Geo.2/",
+        category: "Geometría",
+        symbol: "△",
+        accent: "#ff8a00",
+        description: "Proyecto centrado en geometría, pensado para acercar conceptos espaciales y representaciones visuales mediante una experiencia web de autoría estudiantil.",
+        tags: ["Geometría", "Figuras", "Representación"]
+      },
+      {
+        title: "Geo Stats",
+        author: "Carlos Cortes",
+        url: "https://carlosmariocortes509.github.io/geo_stats/",
+        category: "Estadística",
+        symbol: "σ",
+        accent: "#cad400",
+        description: "Recurso que articula pensamiento geométrico y estadístico, útil para explorar datos, representación gráfica y análisis matemático aplicado.",
+        tags: ["Estadística", "Datos", "Gráficas"]
+      },
+      {
+        title: "Eduquest Math",
+        author: "Mabel Barragán Caballero",
+        url: "https://mabelbc96.github.io/Eduquest_math/",
+        category: "Gamificación",
+        symbol: "★",
+        accent: "#80ba27",
+        description: "Experiencia tipo reto educativo para dinamizar el aprendizaje de matemáticas mediante navegación, preguntas, misiones o actividades de descubrimiento.",
+        tags: ["Gamificación", "Retos", "Aprendizaje activo"]
+      },
+      {
+        title: "Herramientas IA para la educación",
+        author: "Santiago Sanabria",
+        url: "https://github.com/santiagosanabria141/Herramientas-IA-para-la-eduaci-n",
+        category: "IA educativa",
+        symbol: "Σ",
+        accent: "#00acc9",
+        description: "Repositorio en GitHub relacionado con herramientas de inteligencia artificial aplicadas a la educación, con potencial de adaptación para la enseñanza matemática.",
+        tags: ["GitHub", "IA", "Educación"]
+      }
+    ];
+
+    const grid = document.getElementById("resourceGrid");
+    const filters = document.getElementById("filters");
+    const searchInput = document.getElementById("searchInput");
+    const emptyState = document.getElementById("emptyState");
+    const toast = document.getElementById("toast");
+    const totalResources = document.getElementById("totalResources");
+    let activeCategory = "Todos";
+
+    totalResources.textContent = resources.length;
+
+    const categories = ["Todos", ...new Set(resources.map(item => item.category))];
+
+    function renderFilters() {
+      filters.innerHTML = categories.map(category => `
+        <button class="chip ${category === activeCategory ? "active" : ""}" type="button" data-category="${category}">
+          ${category}
+        </button>
+      `).join("");
+    }
+
+    function normalize(value) {
+      return value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function renderCards() {
+      const query = normalize(searchInput.value.trim());
+      const filtered = resources.filter(item => {
+        const matchesCategory = activeCategory === "Todos" || item.category === activeCategory;
+        const haystack = normalize([item.title, item.author, item.category, item.description, ...item.tags].join(" "));
+        return matchesCategory && (!query || haystack.includes(query));
+      });
+
+      grid.innerHTML = filtered.map((item, index) => `
+        <article class="resource-card" data-symbol="${item.symbol}" style="--accent:${item.accent}; --accent-soft:${hexToRgba(item.accent, 0.22)}">
+          <div class="card-top">
+            <span class="badge">${item.category}</span>
+            <span class="number">${String(index + 1).padStart(2, "0")}</span>
+          </div>
+          <h3>${item.title}</h3>
+          <p class="description">${item.description}</p>
+          <div class="author">
+            <span class="author-icon">∑</span>
+            <span>${item.author}</span>
+          </div>
+          <div class="tags">
+            ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
+          </div>
+          <div class="card-actions">
+            <a class="visit" href="${item.url}" target="_blank" rel="noopener noreferrer">Abrir recurso</a>
+            <button class="copy" type="button" data-url="${item.url}" title="Copiar enlace" aria-label="Copiar enlace de ${item.title}">⧉</button>
+          </div>
+        </article>
+      `).join("");
+
+      emptyState.style.display = filtered.length ? "none" : "block";
+    }
+
+    function hexToRgba(hex, alpha) {
+      const clean = hex.replace("#", "");
+      const bigint = parseInt(clean, 16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    filters.addEventListener("click", event => {
+      const button = event.target.closest("[data-category]");
+      if (!button) return;
+      activeCategory = button.dataset.category;
+      renderFilters();
+      renderCards();
+    });
+
+    searchInput.addEventListener("input", renderCards);
+
+    grid.addEventListener("click", async event => {
+      const button = event.target.closest("[data-url]");
+      if (!button) return;
+      try {
+        await navigator.clipboard.writeText(button.dataset.url);
+        showToast("Enlace copiado al portapapeles");
+      } catch (error) {
+        showToast("Copia manual: abre el recurso y toma la URL");
+      }
+    });
+
+    function drawMathCanvas() {
+      const canvas = document.getElementById("mathCanvas");
+      const ctx = canvas.getContext("2d");
+      const width = canvas.width;
+      const height = canvas.height;
+      let t = 0;
+
+      function drawGrid() {
+        ctx.clearRect(0, 0, width, height);
+        const gradient = ctx.createLinearGradient(0, 0, width, height);
+        gradient.addColorStop(0, "rgba(0, 172, 201, 0.12)");
+        gradient.addColorStop(0.55, "rgba(255, 255, 255, 0.04)");
+        gradient.addColorStop(1, "rgba(255, 138, 0, 0.12)");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.strokeStyle = "rgba(255,255,255,0.1)";
+        ctx.lineWidth = 1;
+        for (let x = 0; x <= width; x += 40) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, height);
+          ctx.stroke();
+        }
+        for (let y = 0; y <= height; y += 40) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(width, y);
+          ctx.stroke();
+        }
+
+        ctx.strokeStyle = "rgba(255,255,255,0.34)";
+        ctx.beginPath();
+        ctx.moveTo(0, height / 2);
+        ctx.lineTo(width, height / 2);
+        ctx.moveTo(width / 2, 0);
+        ctx.lineTo(width / 2, height);
+        ctx.stroke();
+      }
+
+      function drawParabola() {
+        ctx.beginPath();
+        for (let px = 0; px <= width; px++) {
+          const x = (px - width / 2) / 62;
+          const a = 0.55 + Math.sin(t * 0.02) * 0.18;
+          const b = Math.cos(t * 0.018) * 0.8;
+          const c = Math.sin(t * 0.015) * 1.4;
+          const y = a * x * x + b * x + c;
+          const py = height / 2 - y * 34;
+          if (px === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        const grad = ctx.createLinearGradient(0, 0, width, 0);
+        grad.addColorStop(0, "#21d4fd");
+        grad.addColorStop(0.5, "#cad400");
+        grad.addColorStop(1, "#ff8a00");
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 5;
+        ctx.shadowColor = "rgba(33, 212, 253, 0.55)";
+        ctx.shadowBlur = 16;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+
+      function drawNodes() {
+        const points = [
+          [110 + Math.sin(t * 0.025) * 18, 92],
+          [238, 178 + Math.cos(t * 0.022) * 16],
+          [412 + Math.cos(t * 0.018) * 22, 118],
+          [560, 226 + Math.sin(t * 0.02) * 18]
+        ];
+
+        ctx.strokeStyle = "rgba(202, 212, 0, 0.38)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        points.forEach(([x, y], index) => {
+          if (index === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+
+        points.forEach(([x, y], index) => {
+          ctx.beginPath();
+          ctx.arc(x, y, 8 + Math.sin(t * 0.04 + index) * 2, 0, Math.PI * 2);
+          ctx.fillStyle = index % 2 ? "#cad400" : "#21d4fd";
+          ctx.fill();
+          ctx.strokeStyle = "rgba(255,255,255,0.7)";
+          ctx.stroke();
+        });
+      }
+
+      function drawLabels() {
+        ctx.font = "700 18px Segoe UI, sans-serif";
+        ctx.fillStyle = "rgba(255,255,255,0.88)";
+        ctx.fillText("f(x)=ax²+bx+c", 24, 34);
+        ctx.fillText("IA + visualización matemática", 24, height - 24);
+        ctx.fillStyle = "rgba(202,212,0,0.95)";
+        ctx.fillText("Σ recursos", width - 150, 34);
+      }
+
+      function frame() {
+        drawGrid();
+        drawNodes();
+        drawParabola();
+        drawLabels();
+        t += 1;
+        requestAnimationFrame(frame);
+      }
+
+      frame();
+    }
+
+    renderFilters();
+    renderCards();
+    drawMathCanvas();
+  </script>
+</body>
+</html>
